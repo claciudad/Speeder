@@ -1,3 +1,6 @@
+rem Solicitar elevación para hacer los cambios
+runas.exe /user:%USERNAME% "%~dp0%~n0"
+
 @echo off
 
 rem Obtener la información de configuración de red actual
@@ -5,39 +8,38 @@ ipconfig /all
 
 rem Comprobar si el adaptador de red es compatible con TCP Chimney Offload
 if "%adapter_type%" == "802.11" (
-    echo "El adaptador de red no es compatible con TCP Chimney Offload"
-    exit /b
+  echo "El adaptador de red no es compatible con TCP Chimney Offload"
+  goto end
 )
+
+rem Comprobar si TCP Chimney Offload ya está habilitado
+netsh int tcp show global | find "Chimney" | find "enabled" >nul
+if %errorlevel% == 0 goto chimney_enabled
 
 rem Habilitar TCP Chimney Offload
 netsh int tcp set global chimney=enabled
 
-rem Comprobar si hay problemas con firewalls o VPN
-if %errorlevel% == 1 (
-    echo "Se han detectado problemas con firewalls o VPN"
-    exit /b
-)
+:chimney_enabled
+
+rem Comprobar si el nivel de ajuste automático de TCP ya está en "normal" 
+netsh int tcp show global | find "Receive-Side Scaling" | find "normal" >nul
+if %errorlevel% == 0 goto autotuning_set
 
 rem Establecer el nivel de ajuste automático de TCP en "normal"
 netsh int tcp set global autotuninglevel=normal
 
-rem Comprobar si hay problemas de rendimiento
-ping 8.8.8.8 -n 10
-if %errorlevel% == 1 (
-    echo "El nivel de ajuste automático de TCP no es compatible con tu red"
-    exit /b
-)
+:autotuning_set
+
+rem Comprobar si el proveedor de congestión TCP ya está en CTCP
+netsh int tcp show global | find "Congestion" | find "ctcp" >nul
+if %errorlevel% == 0 goto ctcp_set 
 
 rem Establecer el proveedor de congestión TCP en CTCP
 netsh int tcp set global congestionprovider=ctcp
 
-rem Comprobar si hay problemas de compatibilidad
-if %errorlevel% == 1 (
-    echo "El proveedor de congestión TCP CTCP no es compatible con tu red"
-    exit /b
-)
+:ctcp_set
 
-echo "Se han realizado los cambios con éxito"
+echo "Configuración realizada correctamente"
 
 rem Agregar arte ASCII con el texto "Speeder"
 echo.
@@ -52,3 +54,5 @@ echo.         \/|__|        \/     \/     \/    \/
 echo.
 echo.                 by Quamagi & Bard
 echo.
+
+:end
