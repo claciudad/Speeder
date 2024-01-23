@@ -1,13 +1,14 @@
-# Speeder
+Speeder
+-------
 
-! [Logo de Speeder] (https://raw.githubusercontent.com/Quamagi/Speeder/main/logo.jpg)
+![logo](https://i3.wp.com/raw.githubusercontent.com/Quamagi/Speeder/main/logo.jpg)
 
 Speeder es un script de Windows que puede ayudar a mejorar la velocidad de Internet. El script realiza los siguientes cambios en la configuración de TCP/IP:
 
-* Habilita TCP Chimney Offload, una función que puede descargar ciertas tareas de procesamiento TCP/IP al adaptador de red.
-* Desactiva las heurísticas TCP, que son algoritmos que Windows utiliza para ajustar dinámicamente la configuración de TCP.
-* Establece el nivel de ajuste automático de TCP en "normal", que es el equilibrio predeterminado entre el rendimiento y la estabilidad.
-* Establece el proveedor de congestión TCP en CTCP, un algoritmo de control de congestión más nuevo que puede mejorar el rendimiento en ciertos escenarios.
+*   Habilita TCP Chimney Offload, una función que puede descargar ciertas tareas de procesamiento TCP/IP al adaptador de red.
+*   Desactiva las heurísticas TCP, que son algoritmos que Windows utiliza para ajustar dinámicamente la configuración de TCP.
+*   Establece el nivel de ajuste automático de TCP en "normal", que es el equilibrio predeterminado entre el rendimiento y la estabilidad.
+*   Establece el proveedor de congestión TCP en CTCP, un algoritmo de control de congestión más nuevo que puede mejorar el rendimiento en ciertos escenarios.
 
 **Instalación**
 
@@ -44,3 +45,30 @@ Basado en el script "Internet-Speed-Booster" modificado por Quamagi y Bard
 Los créditos se han añadido a la sección "Instalación". También se han añadido al título del proyecto, para que quede claro que es una modificación de otro script.
 
 Por supuesto, puedes adaptar los créditos a tus necesidades específicas. Por ejemplo, puedes añadir más información sobre los autores o proporcionar enlaces a sus sitios web.
+
+*   Unordered lists, and:
+    1.  One
+    2.  Two
+    3.  Three
+*   More
+
+> Blockquote
+
+And **bold**, _italics_, and even _italics and later **bold**_. Even ~strikethrough~. [A link](https://markdowntohtml.com/) to somewhere.
+
+And code highlighting:
+
+    var foo = 'bar';
+    
+    function baz(s) {
+       return foo + ':' + s;
+    }
+    
+
+Or inline code like `var foo = 'bar';`.
+
+Or an image of bears
+
+![bears](http://placebear.com/200/200)
+
+The end ...
