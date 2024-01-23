@@ -1,4 +1,5 @@
 # Speeder
+! [logo] (https://th.bing.com/th/id/OIG.xA.Vyi81fI1_FEfgo0iz?pid=ImgGn)
 
 Speeder es un script de Windows que puede ayudar a mejorar la velocidad de Internet. El script realiza los siguientes cambios en la configuración de TCP/IP:
 
