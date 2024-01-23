@@ -38,3 +38,17 @@ if %errorlevel% == 1 (
 )
 
 echo "Se han realizado los cambios con éxito"
+
+rem Agregar arte ASCII con el texto "Speeder"
+echo.
+echo.
+echo.
+echo.   _________                        .___            
+echo.  /   _____/_____   ____   ____   __| _/___________ 
+echo.  \_____  \\____ \_/ __ \_/ __ \ / __ |/ __ \_  __ \
+echo.  /        \  |_> >  ___/\  ___// /_/ \  ___/|  | \/
+echo. /_______  /   __/ \___  >\___  >____ |\___  >__|   
+echo.         \/|__|        \/     \/     \/    \/
+echo.
+echo.                 by Quamagi & Bard
+echo.
