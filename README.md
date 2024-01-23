@@ -3,72 +3,24 @@ Speeder
 
 ![logo](https://i3.wp.com/raw.githubusercontent.com/Quamagi/Speeder/main/logo.jpg)
 
-Speeder es un script de Windows que puede ayudar a mejorar la velocidad de Internet. El script realiza los siguientes cambios en la configuración de TCP/IP:
+Script de optimización de red para Windows
+Este script de batch de Windows se puede usar para optimizar la configuración de red de una computadora. El script realiza los siguientes cambios:
 
-*   Habilita TCP Chimney Offload, una función que puede descargar ciertas tareas de procesamiento TCP/IP al adaptador de red.
-*   Desactiva las heurísticas TCP, que son algoritmos que Windows utiliza para ajustar dinámicamente la configuración de TCP.
-*   Establece el nivel de ajuste automático de TCP en "normal", que es el equilibrio predeterminado entre el rendimiento y la estabilidad.
-*   Establece el proveedor de congestión TCP en CTCP, un algoritmo de control de congestión más nuevo que puede mejorar el rendimiento en ciertos escenarios.
+Habilita TCP Chimney Offload, que puede mejorar el rendimiento de la red en algunos casos.
+Establece el nivel de ajuste automático de TCP en "normal", que puede mejorar la estabilidad de la red.
+Establece el proveedor de congestión TCP en CTCP, que puede mejorar el rendimiento de la red en algunos casos.
+Cómo funciona
+El script funciona usando los siguientes comandos de Windows:
 
-**Instalación**
-
-Para instalar Speeder, descarga el archivo ZIP del repositorio de GitHub. Una vez descargado, descomprime el archivo y copia el script `Speeder.bat` a una ubicación accesible desde el símbolo del sistema.
-
-**Uso**
-
-Para ejecutar Speeder, abre el símbolo del sistema y navega hasta la ubicación donde se encuentra el script. A continuación, escribe el siguiente comando:
-
-El script realizará los cambios en la configuración de TCP/IP y mostrará un mensaje de confirmación.
-
-Recomendaciones
-
-Antes de ejecutar Speeder, es recomendable realizar una copia de seguridad de la configuración de TCP/IP original. Para ello, abre el símbolo del sistema y escribe el siguiente comando:
-
-netsh int tcp show global > backup.txt
-
-Esto creará un archivo de texto llamado backup.txt que contiene la configuración de TCP/IP actual.
-
-También es recomendable probar los cambios en un entorno de prueba antes de aplicarlos a tu sistema de producción. Para ello, puedes crear una máquina virtual o utilizar una conexión inalámbrica.
-
+ipconfig /all para obtener la información de configuración de red actual.
+netsh int tcp show global para verificar el estado actual de TCP Chimney Offload, el nivel de ajuste automático de TCP y el proveedor de congestión TCP.
+netsh int tcp set global chimney=[enabled|disabled] para habilitar o deshabilitar TCP Chimney Offload.
+netsh int tcp set global autotuninglevel=[normal|low|high] para establecer el nivel de ajuste automático de TCP.
+netsh int tcp set global congestionprovider=[cubic|bbr|reno] para establecer el proveedor de congestión TCP.
 Compatibilidad
+El script es compatible con los siguientes sistemas operativos Windows:
 
-Speeder es compatible con la mayoría de los adaptadores de red. Sin embargo, es posible que no sea compatible con adaptadores de red antiguos o incompatibles.
-
-Licencia
-
-Speeder está bajo la licencia MIT.
-
+Windows 10
+Windows 11
 Créditos
-
-Basado en el script "Internet-Speed-Booster" modificado por Quamagi y Bard
-
-Los créditos se han añadido a la sección "Instalación". También se han añadido al título del proyecto, para que quede claro que es una modificación de otro script.
-
-Por supuesto, puedes adaptar los créditos a tus necesidades específicas. Por ejemplo, puedes añadir más información sobre los autores o proporcionar enlaces a sus sitios web.
-
-*   Unordered lists, and:
-    1.  One
-    2.  Two
-    3.  Three
-*   More
-
-> Blockquote
-
-And **bold**, _italics_, and even _italics and later **bold**_. Even ~strikethrough~. [A link](https://markdowntohtml.com/) to somewhere.
-
-And code highlighting:
-
-    var foo = 'bar';
-    
-    function baz(s) {
-       return foo + ':' + s;
-    }
-    
-
-Or inline code like `var foo = 'bar';`.
-
-Or an image of bears
-
-![bears](http://placebear.com/200/200)
-
-The end ...
+Este script fue creado por Quamagi y Bard.
