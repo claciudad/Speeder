@@ -1,51 +1,48 @@
-# Solicitar elevación para hacer los cambios
+# Solicitar elevación de privilegios si no se ejecuta como administrador
 if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-    Start-Process PowerShell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    Start-Process -FilePath "PowerShell" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
     exit
 }
 
-# Obtener la información de configuración de red actual
-Write-Host "Información de configuración de red actual:"
+# Mostrar la configuración de red actual
+Write-Host "Obteniendo información de configuración de red actual..."
 ipconfig /all
 
-# Obtener el tipo de adaptador de red
+# Obtener el adaptador de red activo (IPEnabled = True)
 $adapter = Get-WmiObject -Class Win32_NetworkAdapterConfiguration | Where-Object {$_.IPEnabled -eq $true} | Select-Object -First 1
-$adapterType = $adapter.Description
 
-# Comprobar si el adaptador de red es compatible con TCP Chimney Offload
-if ($adapterType -like "*802.11*") {
-    Write-Host "El adaptador de red no es compatible con TCP Chimney Offload"
+# Verificar si el adaptador es compatible con TCP Chimney Offload
+if ($adapter.Description -match "802.11") {
+    Write-Host "El adaptador de red es inalámbrico y no es compatible con TCP Chimney Offload."
     exit
 }
 
-# Comprobar si TCP Chimney Offload ya está habilitado
-$chimney = netsh int tcp show global | Select-String "Chimney"
-if ($chimney -match "enabled") {
-    Write-Host "TCP Chimney Offload ya está habilitado."
-} else {
-    # Habilitar TCP Chimney Offload
+# Verificar y habilitar TCP Chimney Offload si es necesario
+$chimneyStatus = netsh int tcp show global | Select-String "Chimney" | ForEach-Object { $_.ToString().Split(':')[-1].Trim() }
+if ($chimneyStatus -ne "enabled") {
+    Write-Host "Habilitando TCP Chimney Offload..."
     netsh int tcp set global chimney=enabled
-    Write-Host "TCP Chimney Offload ha sido habilitado."
+} else {
+    Write-Host "TCP Chimney Offload ya está habilitado."
 }
 
-# Comprobar si el nivel de ajuste automático de TCP ya está en "normal"
-$autoTuning = netsh int tcp show global | Select-String "Receive Window Auto-Tuning Level"
-if ($autoTuning -match "normal") {
-    Write-Host "El nivel de ajuste automático de TCP ya está en 'normal'."
-} else {
-    # Establecer el nivel de ajuste automático de TCP en "normal"
+# Verificar y establecer ajuste automático de TCP en 'normal' si es necesario
+$autoTuningStatus = netsh int tcp show global | Select-String "Receive Window Auto-Tuning Level" | ForEach-Object { $_.ToString().Split(':')[-1].Trim() }
+if ($autoTuningStatus -ne "normal") {
+    Write-Host "Estableciendo nivel de ajuste automático de TCP en 'normal'..."
     netsh int tcp set global autotuninglevel=normal
-    Write-Host "El nivel de ajuste automático de TCP ha sido establecido en 'normal'."
-}
-
-# Comprobar si el proveedor de congestión TCP ya está en CTCP
-$ctcp = netsh int tcp show global | Select-String "Add-On Congestion Control Provider"
-if ($ctcp -match "ctcp") {
-    Write-Host "El proveedor de congestión TCP ya está en CTCP."
 } else {
-    # Establecer el proveedor de congestión TCP en CTCP
-    netsh int tcp set global congestionprovider=ctcp
-    Write-Host "El proveedor de congestión TCP ha sido establecido en CTCP."
+    Write-Host "El nivel de ajuste automático de TCP ya está en 'normal'."
 }
 
-Write-Host "Configuración realizada correctamente"
+# Verificar y configurar el proveedor de congestión TCP en CTCP si es necesario
+$congestionProviderStatus = netsh int tcp show global | Select-String "Add-On Congestion Control Provider" | ForEach-Object { $_.ToString().Split(':')[-1].Trim() }
+if ($congestionProviderStatus -ne "ctcp") {
+    Write-Host "Estableciendo proveedor de congestión TCP en 'CTCP'..."
+    netsh int tcp set global congestionprovider=ctcp
+} else {
+    Write-Host "El proveedor de congestión TCP ya está en 'CTCP'."
+}
+
+# Confirmación de finalización
+Write-Host "`nConfiguración realizada correctamente."
